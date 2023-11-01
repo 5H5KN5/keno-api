@@ -16,7 +16,26 @@ class KenoAPI:
         self._state = state.upper()
         self._states = ["ACT", "NSW", "QLD", "VIC", "WA", "NT", "SA", "TAS"]
         self._base_url = f"https://api-info-{self._state_redirect.lower()}.keno.com.au"
-
+       
+        # Define headers for HTTP requests
+        self._headers = {
+            "Accept": "application/json, text/plain, */*",
+            "Accept-Encoding": "gzip, deflate, br",
+            "Accept-Language": "en-US,en;q=0.9",
+            "Connection": "keep-alive",
+            "Dnt": "1",
+            "Host": "api-info-qld.keno.com.au",
+            "Origin": "https://www.keno.com.au",
+            "Referer": "https://www.keno.com.au/",
+            "Sec-Ch-Ua": "\"Chromium\";v=\"118\", \"Google Chrome\";v=\"118\", \"Not=A?Brand\";v=\"99\"",
+            "Sec-Ch-Ua-Mobile": "?0",
+            "Sec-Ch-Ua-Platform": "\"Windows\"",
+            "Sec-Fetch-Dest": "empty",
+            "Sec-Fetch-Mode": "cors",
+            "Sec-Fetch-Site": "same-site",
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36"
+        }
+        
     def _get_url(self, end_point="", additional_params=""):
         """
         Private Method:
@@ -170,7 +189,7 @@ class KenoAPI:
                             additional_params=f"&starting_game_number={initial_draw}&number_of_games={total_draws}"
                                               f"&date={start_date}&page_size={page_size}&page_number={page_number}")
 
-        with requests.get(url) as response:
+        with requests.get(url, headers=self._headers) as response:
             response.raise_for_status()
             retrieved = response.json()
         return retrieved
